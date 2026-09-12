@@ -1,8 +1,14 @@
 import { useMemo, useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { categories, productsByCategory, type Product } from '../data/products';
+import {
+  categories,
+  categorySubgroups,
+  productsByCategory,
+  productsByGroup,
+  type Product,
+} from '../data/products';
 import ProductCard from '../components/dashboard/ProductCard';
 import BottomTabBar from '../components/dashboard/BottomTabBar';
 import { colors, fonts, headlineStyle, radii } from '../theme/theme';
@@ -32,11 +38,14 @@ type Props = {
 
 export default function CategoryScreen({ categoryId, onBack }: Props) {
   const [sort, setSort] = useState<SortKey>('default');
+  const [subgroup, setSubgroup] = useState<string>('all');
   const category = categories.find((c) => c.id === categoryId);
-  const products = useMemo(
-    () => sortProducts(productsByCategory(categoryId), sort),
-    [categoryId, sort],
-  );
+  const subgroups = categorySubgroups[categoryId] ?? [];
+
+  const products = useMemo(() => {
+    const base = subgroup === 'all' ? productsByCategory(categoryId) : productsByGroup(subgroup);
+    return sortProducts(base, sort);
+  }, [categoryId, subgroup, sort]);
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right', 'bottom']}>
@@ -54,16 +63,42 @@ export default function CategoryScreen({ categoryId, onBack }: Props) {
         </View>
       </View>
 
-      <FlatList
+      {subgroups.length > 0 && (
+        <ScrollView
+          horizontal
+          style={styles.subgroupScroll}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.subgroupRow}
+        >
+          {[{ group: 'all', title: 'All' }, ...subgroups].map((item) => {
+            const active = item.group === subgroup;
+            return (
+              <TouchableOpacity
+                key={item.group}
+                style={[styles.subgroupPill, active && styles.subgroupPillActive]}
+                activeOpacity={0.8}
+                onPress={() => setSubgroup(item.group)}
+              >
+                <Text style={[styles.subgroupText, active && styles.subgroupTextActive]}>
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      )}
+
+      <ScrollView
         horizontal
-        data={sortOptions}
-        keyExtractor={(o) => o.key}
+        style={styles.sortScroll}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.sortRow}
-        renderItem={({ item }) => {
+      >
+        {sortOptions.map((item) => {
           const active = item.key === sort;
           return (
             <TouchableOpacity
+              key={item.key}
               style={[styles.sortPill, active && styles.sortPillActive]}
               activeOpacity={0.8}
               onPress={() => setSort(item.key)}
@@ -71,8 +106,8 @@ export default function CategoryScreen({ categoryId, onBack }: Props) {
               <Text style={[styles.sortText, active && styles.sortTextActive]}>{item.label}</Text>
             </TouchableOpacity>
           );
-        }}
-      />
+        })}
+      </ScrollView>
 
       <Text style={styles.count}>{products.length} products</Text>
 
@@ -112,7 +147,7 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 12,
+    paddingBottom: 16,
   },
   backButton: {
     width: 40,
@@ -137,14 +172,46 @@ const styles = StyleSheet.create({
     color: colors.ink,
     flexShrink: 1,
   },
+  subgroupScroll: {
+    flexGrow: 0,
+    height: 44,
+  },
+  subgroupRow: {
+    paddingHorizontal: 20,
+    gap: 8,
+    alignItems: 'center',
+  },
+  subgroupPill: {
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: radii.pill,
+    backgroundColor: colors.butter,
+  },
+  subgroupPillActive: {
+    backgroundColor: colors.ink,
+  },
+  subgroupText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.ink,
+  },
+  subgroupTextActive: {
+    color: colors.cream,
+  },
+  sortScroll: {
+    flexGrow: 0,
+    height: 48,
+    marginBottom: 14,
+  },
   sortRow: {
     paddingHorizontal: 20,
     gap: 8,
-    paddingBottom: 12,
+    alignItems: 'center',
   },
   sortPill: {
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: 9,
     borderRadius: radii.pill,
     backgroundColor: colors.salt,
     borderWidth: 1,
@@ -157,6 +224,7 @@ const styles = StyleSheet.create({
   sortText: {
     fontFamily: fonts.bodyMedium,
     fontSize: 12,
+    lineHeight: 16,
     color: colors.ink,
   },
   sortTextActive: {
@@ -165,9 +233,10 @@ const styles = StyleSheet.create({
   count: {
     fontFamily: fonts.body,
     fontSize: 12,
+    lineHeight: 16,
     color: colors.clay,
     paddingHorizontal: 20,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   gridContent: {
     paddingHorizontal: 20,

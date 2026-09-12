@@ -410,3 +410,13 @@ export const decorGroups = [
   { group: 'Bamboo, Cane & Jute', title: 'Bamboo, Cane & Jute', subtitle: '' },
   { group: 'Home Textiles', title: 'Home Textiles', subtitle: '' },
 ] as const;
+
+// Per-category subgroup chip lists, for filtering within a category's
+// listing screen. Categories with a single implicit group (Scrap) are
+// omitted — no subcategory row is shown for those.
+export const categorySubgroups: Record<string, { group: string; title: string }[]> = {
+  'veg-fruits': vegFruitGroups.map((g) => ({ group: g.group, title: g.title })),
+  flowers: flowerGroups.map((g) => ({ group: g.group, title: g.title })),
+  seafood: seafoodGroups.map((g) => ({ group: g.group, title: g.title })),
+  decor: decorGroups.map((g) => ({ group: g.group, title: g.title })),
+};
