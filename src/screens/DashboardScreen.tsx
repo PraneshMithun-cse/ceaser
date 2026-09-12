@@ -18,7 +18,11 @@ import { colors } from '../theme/theme';
 
 const groupedRows = [...vegFruitGroups, ...flowerGroups, ...seafoodGroups, ...decorGroups];
 
-export default function DashboardScreen() {
+type Props = {
+  onSelectCategory: (categoryId: string) => void;
+};
+
+export default function DashboardScreen({ onSelectCategory }: Props) {
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right', 'bottom']}>
       <ScrollView
@@ -29,7 +33,7 @@ export default function DashboardScreen() {
         <DashboardHeader />
         <SearchBar />
         <PromoBanner />
-        <CategoryGrid />
+        <CategoryGrid onSelectCategory={onSelectCategory} />
         {groupedRows.map((row) => (
           <ProductRow
             key={row.group}

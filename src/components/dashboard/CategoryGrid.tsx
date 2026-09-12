@@ -1,8 +1,12 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { categories } from '../../data/products';
 import { colors, fonts } from '../../theme/theme';
 
-export default function CategoryGrid() {
+type Props = {
+  onSelectCategory: (categoryId: string) => void;
+};
+
+export default function CategoryGrid({ onSelectCategory }: Props) {
   return (
     <View style={styles.section}>
       <ScrollView
@@ -11,8 +15,15 @@ export default function CategoryGrid() {
         contentContainerStyle={styles.row}
       >
         {categories.map((c) => (
-          <TouchableOpacity key={c.id} style={styles.item} activeOpacity={0.75}>
-            <View style={[styles.circle, { backgroundColor: c.tint }]} />
+          <TouchableOpacity
+            key={c.id}
+            style={styles.item}
+            activeOpacity={0.75}
+            onPress={() => onSelectCategory(c.id)}
+          >
+            <View style={[styles.circle, { backgroundColor: c.tint }]}>
+              <Image source={c.icon} style={styles.icon} resizeMode="cover" />
+            </View>
             <Text style={styles.label} numberOfLines={2}>
               {c.shortLabel}
             </Text>
@@ -40,6 +51,16 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
+    overflow: 'hidden',
+    shadowColor: colors.ink,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  icon: {
+    width: '100%',
+    height: '100%',
   },
   label: {
     fontFamily: fonts.bodyMedium,

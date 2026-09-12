@@ -13,6 +13,7 @@ import {
 } from '@expo-google-fonts/inter';
 import BootSplashScreen from './src/screens/BootSplashScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
+import CategoryScreen from './src/screens/CategoryScreen';
 import { colors } from './src/theme/theme';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -20,6 +21,7 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 export default function App() {
   const [customFontsLoaded, setCustomFontsLoaded] = useState(false);
   const [bootDone, setBootDone] = useState(false);
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
 
   const [interLoaded] = useFonts({
     Inter_400Regular,
@@ -56,8 +58,13 @@ export default function App() {
       <View style={styles.root} onLayout={onLayoutRootView}>
         {!bootDone ? (
           <BootSplashScreen onFinished={() => setBootDone(true)} />
+        ) : activeCategoryId ? (
+          <CategoryScreen
+            categoryId={activeCategoryId}
+            onBack={() => setActiveCategoryId(null)}
+          />
         ) : (
-          <DashboardScreen />
+          <DashboardScreen onSelectCategory={setActiveCategoryId} />
         )}
         <StatusBar style="dark" />
       </View>

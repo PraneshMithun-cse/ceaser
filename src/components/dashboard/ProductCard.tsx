@@ -2,11 +2,16 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { Product } from '../../data/products';
 import { colors, fonts, radii, shadows } from '../../theme/theme';
 
-export default function ProductCard({ product }: { product: Product }) {
+type Props = {
+  product: Product;
+  fullWidth?: boolean;
+};
+
+export default function ProductCard({ product, fullWidth }: Props) {
   const discountPct = Math.round(((product.mrp - product.price) / product.mrp) * 100);
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, fullWidth && styles.cardFullWidth]}>
       <View style={styles.imageWrap}>
         <Image source={{ uri: product.imageUri }} style={styles.image} resizeMode="cover" />
         {discountPct > 0 && (
@@ -45,6 +50,9 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     padding: 10,
     ...shadows.soft,
+  },
+  cardFullWidth: {
+    width: '100%',
   },
   imageWrap: {
     width: '100%',

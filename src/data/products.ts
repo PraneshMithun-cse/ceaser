@@ -43,14 +43,45 @@ export type Category = {
   label: string;
   shortLabel: string;
   tint: string;
+  icon: ReturnType<typeof require>;
 };
 
 export const categories: Category[] = [
-  { id: 'veg-fruits', label: 'Vegetables & Fruits', shortLabel: 'Veg & Fruits', tint: '#facb48' },
-  { id: 'seafood', label: 'Seafood', shortLabel: 'Seafood', tint: '#e7654f' },
-  { id: 'flowers', label: 'Flowers', shortLabel: 'Flowers', tint: '#f1a23b' },
-  { id: 'scrap', label: 'Scrap Dealers', shortLabel: 'Scrap Dealers', tint: '#a8573f' },
-  { id: 'decor', label: 'Accessories & Home Decor', shortLabel: 'Home Decor', tint: '#0d2f28' },
+  {
+    id: 'veg-fruits',
+    label: 'Vegetables & Fruits',
+    shortLabel: 'Veg & Fruits',
+    tint: '#facb48',
+    icon: require('../../assets/categories/veg-fruits.png'),
+  },
+  {
+    id: 'seafood',
+    label: 'Seafood',
+    shortLabel: 'Seafood',
+    tint: '#e7654f',
+    icon: require('../../assets/categories/seafood.png'),
+  },
+  {
+    id: 'flowers',
+    label: 'Flowers',
+    shortLabel: 'Flowers',
+    tint: '#f1a23b',
+    icon: require('../../assets/categories/flowers.png'),
+  },
+  {
+    id: 'scrap',
+    label: 'Scrap Dealers',
+    shortLabel: 'Scrap Dealers',
+    tint: '#a8573f',
+    icon: require('../../assets/categories/scrap.png'),
+  },
+  {
+    id: 'decor',
+    label: 'Accessories & Home Decor',
+    shortLabel: 'Home Decor',
+    tint: '#0d2f28',
+    icon: require('../../assets/categories/home-decor.png'),
+  },
 ];
 
 function seedImage(seed: string) {
