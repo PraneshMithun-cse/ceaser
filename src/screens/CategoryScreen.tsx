@@ -2,13 +2,8 @@ import { useMemo, useState } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import {
-  categories,
-  categorySubgroups,
-  productsByCategory,
-  productsByGroup,
-  type Product,
-} from '../data/products';
+import { categories, categorySubgroups, type Product } from '../data/products';
+import { useProducts } from '../context/ProductsContext';
 import ProductCard from '../components/dashboard/ProductCard';
 import BottomTabBar from '../components/dashboard/BottomTabBar';
 import { colors, fonts, headlineStyle, radii } from '../theme/theme';
@@ -38,6 +33,7 @@ type Props = {
 };
 
 export default function CategoryScreen({ categoryId, onBack, onNavigate }: Props) {
+  const { productsByCategory, productsByGroup } = useProducts();
   const [sort, setSort] = useState<SortKey>('default');
   const [subgroup, setSubgroup] = useState<string>('all');
   const category = categories.find((c) => c.id === categoryId);
@@ -46,7 +42,7 @@ export default function CategoryScreen({ categoryId, onBack, onNavigate }: Props
   const products = useMemo(() => {
     const base = subgroup === 'all' ? productsByCategory(categoryId) : productsByGroup(subgroup);
     return sortProducts(base, sort);
-  }, [categoryId, subgroup, sort]);
+  }, [categoryId, subgroup, sort, productsByCategory, productsByGroup]);
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right', 'bottom']}>

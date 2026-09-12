@@ -2,7 +2,8 @@
   "expo": {
     "name": "Buylo",
     "slug": "buylo",
-    "version": "1.0.0",
+    "scheme": "buylo",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/brand/buylo-icon.png",
     "userInterfaceStyle": "light",
@@ -17,13 +18,22 @@
         "foregroundImage": "./assets/brand/buylo-icon.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.buylo"
+      "package": "com.anonymous.buylo",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/brand/buylo-icon.png"
     },
     "plugins": [
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/RocGrotesk-Black.otf",
+            "./assets/fonts/ThingsToRemember-Regular.otf"
+          ]
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -32,7 +42,16 @@
           "imageWidth": 1
         }
       ],
-      "expo-image"
+      "expo-image",
+      "expo-secure-store",
+      "expo-web-browser",
+      "@clerk/expo",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Buylo uses your location to show nearby vendors and delivery estimates."
+        }
+      ]
     ]
   }
 }

@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import type { Product } from '../../data/products';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { colors, fonts, radii, shadows } from '../../theme/theme';
 
 type Props = {
@@ -13,7 +14,9 @@ type Props = {
 export default function ProductCard({ product, fullWidth }: Props) {
   const discountPct = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   const { quantityOf, addItem, increment, decrement } = useCart();
+  const { isWishlisted, toggle } = useWishlist();
   const qty = quantityOf(product.id);
+  const liked = isWishlisted(product.id);
 
   return (
     <View style={[styles.card, fullWidth && styles.cardFullWidth]}>
@@ -33,6 +36,18 @@ export default function ProductCard({ product, fullWidth }: Props) {
             <Text style={styles.discountText}>{discountPct}% OFF</Text>
           </View>
         )}
+        <TouchableOpacity
+          style={styles.wishlistButton}
+          activeOpacity={0.75}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          onPress={() => toggle(product)}
+        >
+          <Ionicons
+            name={liked ? 'heart' : 'heart-outline'}
+            size={16}
+            color={liked ? colors.coral : colors.ink}
+          />
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.name} numberOfLines={2}>
@@ -122,6 +137,17 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyBold,
     fontSize: 9,
     color: colors.salt,
+  },
+  wishlistButton: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: 'rgba(244, 240, 223, 0.9)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   name: {
     fontFamily: fonts.bodySemiBold,

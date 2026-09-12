@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import type { Product } from '../../data/products';
-import { colors, fonts, headlineStyle } from '../../theme/theme';
+import { colors, displayScript, fonts, headlineStyle } from '../../theme/theme';
 import ProductCard from './ProductCard';
 
 type Props = {
@@ -14,7 +14,7 @@ export default function ProductRow({ title, subtitle, data }: Props) {
     <View style={styles.section}>
       <View style={styles.header}>
         <Text style={[headlineStyle(20), styles.title]}>{title}</Text>
-        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+        {subtitle ? <Text style={[styles.subtitle, displayScript]}>{subtitle}</Text> : null}
       </View>
       <FlatList
         horizontal
