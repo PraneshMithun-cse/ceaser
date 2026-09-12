@@ -2,16 +2,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, fonts } from '../../theme/theme';
 
-const tabs = [
-  { key: 'home', label: 'Home', icon: 'home' as const },
-  { key: 'categories', label: 'Categories', icon: 'grid' as const },
-  { key: 'cart', label: 'Cart', icon: 'cart' as const },
-  { key: 'profile', label: 'Profile', icon: 'person' as const },
+export type TabKey = 'home' | 'categories' | 'cart' | 'profile';
+
+const tabs: { key: TabKey; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { key: 'home', label: 'Home', icon: 'home' },
+  { key: 'categories', label: 'Categories', icon: 'grid' },
+  { key: 'cart', label: 'Cart', icon: 'cart' },
+  { key: 'profile', label: 'Profile', icon: 'person' },
 ];
 
 type Props = {
-  active?: string;
-  onTabPress?: (key: string) => void;
+  active?: TabKey;
+  onTabPress?: (key: TabKey) => void;
 };
 
 export default function BottomTabBar({ active = 'home', onTabPress }: Props) {

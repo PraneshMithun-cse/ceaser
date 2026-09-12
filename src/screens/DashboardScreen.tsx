@@ -20,9 +20,10 @@ const groupedRows = [...vegFruitGroups, ...flowerGroups, ...seafoodGroups, ...de
 
 type Props = {
   onSelectCategory: (categoryId: string) => void;
+  onNavigate: (screen: 'home' | 'categories' | 'cart' | 'profile') => void;
 };
 
-export default function DashboardScreen({ onSelectCategory }: Props) {
+export default function DashboardScreen({ onSelectCategory, onNavigate }: Props) {
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right', 'bottom']}>
       <ScrollView
@@ -30,7 +31,7 @@ export default function DashboardScreen({ onSelectCategory }: Props) {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <DashboardHeader />
+        <DashboardHeader onPressCart={() => onNavigate('cart')} />
         <SearchBar />
         <PromoBanner />
         <CategoryGrid onSelectCategory={onSelectCategory} />
@@ -48,7 +49,7 @@ export default function DashboardScreen({ onSelectCategory }: Props) {
           data={productsByCategory('scrap')}
         />
       </ScrollView>
-      <BottomTabBar active="home" />
+      <BottomTabBar active="home" onTabPress={onNavigate} />
     </SafeAreaView>
   );
 }

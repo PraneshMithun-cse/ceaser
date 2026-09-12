@@ -1,8 +1,15 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useCart } from '../../context/CartContext';
 import { colors, fonts, headlineStyle } from '../../theme/theme';
 
-export default function DashboardHeader() {
+type Props = {
+  onPressCart: () => void;
+};
+
+export default function DashboardHeader({ onPressCart }: Props) {
+  const { totalCount } = useCart();
+
   return (
     <View style={styles.row}>
       <View style={styles.left}>
@@ -19,8 +26,13 @@ export default function DashboardHeader() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.cartButton} activeOpacity={0.75}>
+      <TouchableOpacity style={styles.cartButton} activeOpacity={0.75} onPress={onPressCart}>
         <Ionicons name="cart-outline" size={22} color={colors.salt} />
+        {totalCount > 0 && (
+          <View style={styles.cartBadge}>
+            <Text style={styles.cartBadgeText}>{totalCount > 9 ? '9+' : totalCount}</Text>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -71,5 +83,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
+  },
+  cartBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    paddingHorizontal: 4,
+    backgroundColor: colors.coral,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: colors.cream,
+  },
+  cartBadgeText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 10,
+    lineHeight: 13,
+    color: colors.salt,
   },
 });

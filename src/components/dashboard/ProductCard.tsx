@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import type { Product } from '../../data/products';
+import { useCart } from '../../context/CartContext';
 import { colors, fonts, radii, shadows } from '../../theme/theme';
 
 type Props = {
@@ -11,6 +12,8 @@ type Props = {
 
 export default function ProductCard({ product, fullWidth }: Props) {
   const discountPct = Math.round(((product.mrp - product.price) / product.mrp) * 100);
+  const { quantityOf, addItem, increment, decrement } = useCart();
+  const qty = quantityOf(product.id);
 
   return (
     <View style={[styles.card, fullWidth && styles.cardFullWidth]}>
@@ -44,9 +47,33 @@ export default function ProductCard({ product, fullWidth }: Props) {
             <Text style={styles.mrp}>₹{product.mrp}</Text>
           )}
         </View>
-        <TouchableOpacity style={styles.addButton} activeOpacity={0.8}>
-          <Text style={styles.addText}>ADD</Text>
-        </TouchableOpacity>
+        {qty === 0 ? (
+          <TouchableOpacity
+            style={styles.addButton}
+            activeOpacity={0.8}
+            onPress={() => addItem(product)}
+          >
+            <Text style={styles.addText}>ADD</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.stepper}>
+            <TouchableOpacity
+              style={styles.stepperButton}
+              activeOpacity={0.8}
+              onPress={() => decrement(product.id)}
+            >
+              <Ionicons name="remove" size={14} color={colors.salt} />
+            </TouchableOpacity>
+            <Text style={styles.stepperQty}>{qty}</Text>
+            <TouchableOpacity
+              style={styles.stepperButton}
+              activeOpacity={0.8}
+              onPress={() => increment(product.id)}
+            >
+              <Ionicons name="add" size={14} color={colors.salt} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -138,5 +165,28 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyBold,
     fontSize: 11,
     color: colors.coral,
+  },
+  stepper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: colors.coral,
+    borderRadius: radii.sm,
+    paddingHorizontal: 6,
+    paddingVertical: 5,
+  },
+  stepperButton: {
+    width: 18,
+    height: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepperQty: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.salt,
+    minWidth: 14,
+    textAlign: 'center',
   },
 });

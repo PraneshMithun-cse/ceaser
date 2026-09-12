@@ -34,9 +34,10 @@ function sortProducts(products: Product[], sort: SortKey): Product[] {
 type Props = {
   categoryId: string;
   onBack: () => void;
+  onNavigate: (screen: 'home' | 'categories' | 'cart' | 'profile') => void;
 };
 
-export default function CategoryScreen({ categoryId, onBack }: Props) {
+export default function CategoryScreen({ categoryId, onBack, onNavigate }: Props) {
   const [sort, setSort] = useState<SortKey>('default');
   const [subgroup, setSubgroup] = useState<string>('all');
   const category = categories.find((c) => c.id === categoryId);
@@ -130,6 +131,7 @@ export default function CategoryScreen({ categoryId, onBack }: Props) {
         active="categories"
         onTabPress={(key) => {
           if (key === 'home') onBack();
+          else onNavigate(key);
         }}
       />
     </SafeAreaView>
@@ -175,6 +177,7 @@ const styles = StyleSheet.create({
   subgroupScroll: {
     flexGrow: 0,
     height: 44,
+    marginBottom: 12,
   },
   subgroupRow: {
     paddingHorizontal: 20,
@@ -202,7 +205,7 @@ const styles = StyleSheet.create({
   sortScroll: {
     flexGrow: 0,
     height: 48,
-    marginBottom: 14,
+    marginBottom: 16,
   },
   sortRow: {
     paddingHorizontal: 20,
