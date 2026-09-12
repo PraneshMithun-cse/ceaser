@@ -11,11 +11,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = join(__dirname, '../src/data/productImages.generated.json');
 
 const fixes = {
-  'red-chilli-veg': 'Capsicum annuum fruit',
-  'banana-flower-veg': 'Musa inflorescence flower',
-  'banana-stem-veg': 'Banana pseudostem cross section',
-  'chow-chow-chayote-veg': 'Sechium edule',
-  'white-prawn-prawn': 'Penaeus vannamei',
+  'banana-stem-veg': 'Banana pseudostem vegetable market',
+  'baby-squid-squid': 'Squid market fresh seafood',
+  'bamboo-basket-bamboo': 'Bamboo basket close up',
+  'nendran-banana': 'Nendran banana bunch',
+  'medium-prawn-prawn': 'Raw prawns close up market',
+  'carpet-textile': 'Persian carpet textile pattern',
 };
 
 function sleep(ms) {
