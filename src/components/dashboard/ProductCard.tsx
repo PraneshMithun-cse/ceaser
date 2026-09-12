@@ -1,4 +1,6 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image } from 'expo-image';
+import { Ionicons } from '@expo/vector-icons';
 import type { Product } from '../../data/products';
 import { colors, fonts, radii, shadows } from '../../theme/theme';
 
@@ -13,7 +15,16 @@ export default function ProductCard({ product, fullWidth }: Props) {
   return (
     <View style={[styles.card, fullWidth && styles.cardFullWidth]}>
       <View style={styles.imageWrap}>
-        <Image source={{ uri: product.imageUri }} style={styles.image} resizeMode="cover" />
+        <View style={styles.imagePlaceholder}>
+          <Ionicons name="image-outline" size={22} color="rgba(21, 63, 50, 0.15)" />
+        </View>
+        <Image
+          source={{ uri: product.imageUri }}
+          style={styles.image}
+          contentFit="cover"
+          transition={250}
+          cachePolicy="memory-disk"
+        />
         {discountPct > 0 && (
           <View style={styles.discountBadge}>
             <Text style={styles.discountText}>{discountPct}% OFF</Text>
@@ -65,6 +76,11 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  imagePlaceholder: {
+    ...StyleSheet.absoluteFill,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   discountBadge: {
     position: 'absolute',

@@ -9,13 +9,23 @@ const tabs = [
   { key: 'profile', label: 'Profile', icon: 'person' as const },
 ];
 
-export default function BottomTabBar({ active = 'home' }: { active?: string }) {
+type Props = {
+  active?: string;
+  onTabPress?: (key: string) => void;
+};
+
+export default function BottomTabBar({ active = 'home', onTabPress }: Props) {
   return (
     <View style={styles.bar}>
       {tabs.map((t) => {
         const isActive = t.key === active;
         return (
-          <TouchableOpacity key={t.key} style={styles.tab} activeOpacity={0.7}>
+          <TouchableOpacity
+            key={t.key}
+            style={styles.tab}
+            activeOpacity={0.7}
+            onPress={() => onTabPress?.(t.key)}
+          >
             <Ionicons
               name={isActive ? t.icon : (`${t.icon}-outline` as any)}
               size={22}

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { categories, productsByCategory, type Product } from '../data/products';
 import ProductCard from '../components/dashboard/ProductCard';
+import BottomTabBar from '../components/dashboard/BottomTabBar';
 import { colors, fonts, headlineStyle, radii } from '../theme/theme';
 
 type SortKey = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
@@ -89,6 +90,12 @@ export default function CategoryScreen({ categoryId, onBack }: Props) {
         initialNumToRender={10}
         windowSize={7}
         removeClippedSubviews
+      />
+      <BottomTabBar
+        active="categories"
+        onTabPress={(key) => {
+          if (key === 'home') onBack();
+        }}
       />
     </SafeAreaView>
   );

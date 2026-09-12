@@ -31,7 +31,8 @@
           "image": "./assets/brand/splash-transparent.png",
           "imageWidth": 1
         }
-      ]
+      ],
+      "expo-image"
     ]
   }
 }
